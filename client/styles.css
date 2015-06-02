@@ -23,3 +23,9 @@
         z-index:1002;
         overflow: auto;
     }
+    .chat_content {
+    width: 250px;
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x:hidden;
+}

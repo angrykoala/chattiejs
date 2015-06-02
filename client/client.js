@@ -7,7 +7,9 @@ function send() {
 	socket.emit('msg',name,input);
 }
 function showMessage(msg){
-	document.getElementById("chat").innerHTML=msg.name+':'+msg.message+'</br>'+document.getElementById("chat").innerHTML;
+ 	var chatobj=document.getElementById("chat");
+	chatobj.innerHTML=chatobj.innerHTML+'</br>'+msg.name+':'+msg.message;
+	chatobj.scrollTop = chatobj.scrollHeight;
 }
 
 function login(){
