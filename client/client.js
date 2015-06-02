@@ -24,9 +24,15 @@ function login(){
 	
 	}
 }
-function startChat(username){
+function startChat(){
 	document.getElementById('light').style.display='none';
 	document.getElementById('fade').style.display='none';
+}
+function closeChat(){
+	document.getElementById('light').style.display='block';
+	document.getElementById('fade').style.display='block';
+	document.getElementById("loginButton").disabled=false;
+	alert('Server stop working');
 }
 
 
@@ -42,5 +48,5 @@ socket.on('all-connections', function(data) {
 	//actualizarLista(data);
 });
 socket.on('disconnect', function() {
-	mostrar_mensaje('El servicio ha dejado de funcionar!!');
+	closeChat();
 });
