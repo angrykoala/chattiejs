@@ -1,0 +1,7 @@
+{
+  "name": "chattieJS",
+  "version": "0.0.2",
+  "dependencies": {
+    "socket.io": ""
+  }
+}

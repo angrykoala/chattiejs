@@ -1,0 +1,50 @@
+<!---<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Chattie</title>
+	</head>
+	<body>
+	<h1>Chattie</h1>
+	<p id="chat">
+	</p>
+	<form action="javascript:void(0);" onsubmit="javascript:send();">
+			Chat: <input type="label" id="userInput" /><br />
+			<input type="submit" value="Enviar" />
+		</form>
+		<span id="resul"></span>
+	</body>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="client.js"></script>	
+	
+</html>--->
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ChattieJS</title>
+ 	<link rel="stylesheet" type="text/css" href="client/styles.css">
+</head>
+<body>
+    	<h1>Chattie</h1>
+	<p id="chat">
+	</p>
+	<form action="javascript:void(0);" onsubmit="javascript:send();">
+			Chat: <input type="label" id="userInput" /><br />
+			<input type="submit" value="Enviar" />
+		</form>
+		<span id="resul"></span>
+    
+    <div id="light" class="white_content">
+    This is the lightbox content.
+    <form action="javascript:void(0);" onsubmit="javascript:login();">
+			Username: <input type="label" id="nameInput" /><br />
+			<input id="loginButton" type="submit" value="Login" />
+		</form>
+		 </div>
+   <!-- <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a></div>-->
+    
+    <div id="fade" class="black_overlay"></div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+	<script src="client/client.js"></script>
+	</html>	
