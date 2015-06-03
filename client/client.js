@@ -9,7 +9,7 @@ function send() {
 }
 function showMessage(msg){
  	var chatobj=document.getElementById("chat");
-	chatobj.innerHTML=chatobj.innerHTML+'</br>'+msg.name+':'+msg.message;
+	chatobj.innerHTML=chatobj.innerHTML+'</br>'+'['+msg.name+']:'+msg.message;
 	chatobj.scrollTop = chatobj.scrollHeight;
 }
 

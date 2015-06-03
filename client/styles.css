@@ -26,6 +26,15 @@
     .chat_content {
     width: 250px;
     height: 200px;
-    overflow-y: scroll;
+    word-wrap: break-word;
     overflow-x:hidden;
-}
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    background: #CCCCCC;
+    }
+    .center{
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }

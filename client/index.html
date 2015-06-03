@@ -5,16 +5,18 @@
  	<link rel="stylesheet" type="text/css" href="client/styles.css">
 </head>
 <body>
+	<div class="center">
     	<h1>Chattie</h1>
 	<p id="chat" class="chat_content">
 	</p>
-	<form action="javascript:void(0);" onsubmit="javascript:send();">
-			Chat: <input type="label" id="userInput" /><br />
-			<input type="submit" value="Enviar" />
+	<form action="javascript:void(0);" onsubmit="javascript:send();" id="chatform">
+			<input type="text" id="userInput"size="30" /><br />
+			<input type="submit" value="Send" />
 		</form>
 		<span id="resul"></span>
-
+	</div>
     <div id="light" class="white_content">
+		<div class="center">
     Welcome to Chattie
     <form action="javascript:void(0);" onsubmit="javascript:login();">
 			Username: <input type="label" id="nameInput" /><br />
@@ -22,9 +24,10 @@
 		</form>
 	<p><font color="red" id="warning_text"></font></p>
 	</div>
+	</div>
 
     <div id="fade" class="black_overlay"></div>
 </body>
-<script src="/socket.io/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
 	<script src="client/client.js"></script>
-	</html>
+</html>
