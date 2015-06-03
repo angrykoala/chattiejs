@@ -43,6 +43,7 @@ function closeChat(){
 socket.on('connect', function(){
 	serverOn=true;
 	document.getElementById("warning_text").innerHTML="";
+		document.getElementById("loginButton").disabled=false;
 	if(name.length>0) login();
 		});
 socket.on('receive', function(msg) {
@@ -55,6 +56,7 @@ socket.on('disconnect', function() {
 	serverOn=false;
 	document.getElementById("warning_text").innerHTML="Server Offline";
 	closeChat();
+	document.getElementById("loginButton").disabled=true;
 });
 socket.on('error',function(message){
 		alert("error"+message);
