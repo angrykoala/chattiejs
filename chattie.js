@@ -47,6 +47,19 @@ httpServer.listen(8080);
 var io = socketio.listen(httpServer);
 
 var clients=[];
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+ }
+function cleanString(oldstring){
+var newstring=oldstring.trim();
+
+return escapeHtml(newstring);
+}
 function addClient(username){
 	clients.push(username);
 }
@@ -56,13 +69,18 @@ function remove(username){
 }
 function isValid(username){
 	if(username.length<3) return false;
+	if(username.indexOf("\<")!=-1 || username.indexOf("\>")!=-1 || username.indexOf("\"")!=-1 || username.indexOf("\'")!=-1 || username.indexOf("\&")!=-1) return false;
 	if(username.toLowerCase().indexOf("server")!=-1) return false;
 	if(username.indexOf(" ")!=-1 || username.indexOf("\n")!=-1) return false;
 	else if(clients.indexOf(username)!=-1) return false;
 	else return true;
 }
 function serverMessage(mess){
-	var msg={name:"Server",message:mess};
+	sendMessage("Server",mess);
+}
+function sendMessage(username,mess){
+	var msg={name:cleanString(username),message:cleanString(mess)}
+	if(msg.message.length>0 && msg.name.length>0)
 	io.sockets.emit('receive', msg);
 }
 
@@ -81,8 +99,8 @@ io.sockets.on('connection',function(client) {
 		});
 		client.on('msg', function (data) {
 		if(clientName.length>0){
-			var msg={name:clientName,message:data};
-			io.sockets.emit('receive', msg);
+			data=data.trim();
+			sendMessage(clientName,data);
 		}
 		});
 		client.on('disconnect', function() {
