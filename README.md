@@ -1,6 +1,6 @@
 ChattieJS
 =========
-_by @demiurgosoft_
+_by @demiurgosoft_     
 Simple chat server and client running on NodeJS, easy to deploy and use.
 
 

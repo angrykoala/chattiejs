@@ -5,7 +5,7 @@ var serverOn=false;
 function send() {
 	var input = document.getElementById("userInput").value;
 	document.getElementById("userInput").value="";
-	socket.emit('msg',input);
+	if(input.trim().length>0)	socket.emit('msg',input.trim());
 }
 function showMessage(msg){
  	var chatobj=document.getElementById("chat");
@@ -19,10 +19,6 @@ if(serverOn){
 	name=document.getElementById("nameInput").value;
 	if(name.length>0){
 	document.getElementById("loginButton").disabled=true;
-/*	socket.on('error', function (message) {
-		document.getElementById("loginButton").disabled=false;
-		document.getElementById("warning_text").innerHTML="Server failed";
-	});*/
 	socket.emit('login',name);
 	socket.on('logged',function(logged){
 		if(logged==true) startChat();

@@ -56,9 +56,14 @@ function remove(username){
 }
 function isValid(username){
 	if(username.length<3) return false;
+	if(username.toLowerCase().indexOf("server")!=-1) return false;
 	if(username.indexOf(" ")!=-1 || username.indexOf("\n")!=-1) return false;
 	else if(clients.indexOf(username)!=-1) return false;
 	else return true;
+}
+function serverMessage(mess){
+	var msg={name:"Server",message:mess};
+	io.sockets.emit('receive', msg);
 }
 
 io.sockets.on('connection',function(client) {
@@ -69,6 +74,7 @@ io.sockets.on('connection',function(client) {
 				clientName=name;
 				clients.push(name);
 				console.log('User '+name+'  '+client.handshake.address+' logged');
+				serverMessage(name+" logged in");
 				client.emit('logged',true);
 			}
 			else client.emit('logged',false);
@@ -82,6 +88,7 @@ io.sockets.on('connection',function(client) {
 		client.on('disconnect', function() {
 			if(clientName.length>0){
 				 console.log("Client "+clientName+" logged out");
+				 serverMessage(clientName+" logged out");
 				index = clients.indexOf(clientName);
 				if (index != -1) clients.splice(index, 1);
 				else console.log('Error disconnecting '+clientName);
