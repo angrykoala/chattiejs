@@ -34,7 +34,7 @@ var httpServer = http.createServer(
 				});
 			}
 			else{
-				//console.log("Peticion invalida: "+uri);
+				console.log("Peticion invalida: "+uri);
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.write('404 Not Found\n');
 				response.end();
@@ -46,31 +46,50 @@ var httpServer = http.createServer(
 httpServer.listen(8080);
 var io = socketio.listen(httpServer);
 
-var allClients = new Array();
+var clients=[];
+function addClient(username){
+	clients.push(username);
+}
+function remove(username){
+	var index=clients.indexOf(username);
+	if(index>-1) clients.splice(index,1);
+}
+function isValid(username){
+	if(username.length<3) return false;
+	if(username.indexOf(" ")!=-1 || username.indexOf("\n")!=-1) return false;
+	else if(clients.indexOf(username)!=-1) return false;
+	else return true;
+}
 
 io.sockets.on('connection',function(client) {
-		allClients.push(client.handshake.address);
-		//io.sockets.emit('all-connections', allClients);
-		console.log('User '+client.handshake.address+' conected');
-		client.on('msg', function (username,data) {
-			var msg={name:username,message:data};
+		var clientName="";
+		console.log(client.handshake.address+' conected');
+		client.on('login',function(name){
+			if(isValid(name)){
+				clientName=name;
+				clients.push(name);
+				console.log('User '+name+'  '+client.handshake.address+' logged');
+				client.emit('logged',true);
+			}
+			else client.emit('logged',false);
+		});
+		client.on('msg', function (data) {
+		if(clientName.length>0){
+			var msg={name:clientName,message:data};
 			io.sockets.emit('receive', msg);
+		}
 		});
 		client.on('disconnect', function() {
-			var index = allClients.indexOf(client.handshake.address);
-			if (index != -1) {
-				allClients.splice(index, 1);
-				io.sockets.emit('all-connections', allClients);
+			if(clientName.length>0){
+				 console.log("Client "+clientName+" logged out");
+				index = clients.indexOf(clientName);
+				if (index != -1) clients.splice(index, 1);
+				else console.log('Error disconnecting '+clientName);
 			}
-			console.log('User '+client.handshake.address+' disconnect');
-		});
-		client.on('login',function(name){
-			console.log('User '+name+'  '+client.handshake.address+' logged');
-			client.emit('logged',true);
+		else console.log('User '+client.handshake.address+' disconnect');
 		});
 	}
 );
 
 
 console.log("ChattieJS running");
-
