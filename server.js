@@ -5,6 +5,9 @@ var path = require("path");
 var socketio = require("socket.io");
 var mimeTypes = { "html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css", "swf": "application/x-shockwave-flash"};
 
+var port=8080;
+
+
 var httpServer = http.createServer(
 	function(request, response) {
 		var uri = url.parse(request.url).pathname;
@@ -34,7 +37,7 @@ var httpServer = http.createServer(
 				});
 			}
 			else{
-				console.log("Peticion invalida: "+uri);
+				console.log("Invalid: "+uri);
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.write('404 Not Found\n');
 				response.end();
@@ -43,22 +46,14 @@ var httpServer = http.createServer(
 	}
 );
 
-httpServer.listen(8080);
+
 var io = socketio.listen(httpServer);
 
 var clients=[];
-function escapeHtml(unsafe) {
-    return unsafe
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
- }
+
 function cleanString(oldstring){
 var newstring=oldstring.trim();
-
-return escapeHtml(newstring);
+return newstring;
 }
 function addClient(username){
 	clients.push(username);
@@ -84,16 +79,25 @@ function sendMessage(username,mess){
 	io.sockets.emit('receive', msg);
 }
 
+var loggedUsers=0
+function logConnectedUsers(){
+	console.log("users logged: "+ loggedUsers);
+}
+
+
 io.sockets.on('connection',function(client) {
 		var clientName="";
-		console.log(client.handshake.address+' conected');
+		console.log('user conected');
 		client.on('login',function(name){
 			if(isValid(name)){
 				clientName=name;
 				clients.push(name);
-				console.log('User '+name+'  '+client.handshake.address+' logged');
+				console.log('User '+name+' logged');
+
 				serverMessage(name+" logged in");
 				client.emit('logged',true);
+				loggedUsers++;
+				logConnectedUsers();
 			}
 			else client.emit('logged',false);
 		});
@@ -106,15 +110,18 @@ io.sockets.on('connection',function(client) {
 		client.on('disconnect', function() {
 			if(clientName.length>0){
 				 console.log("Client "+clientName+" logged out");
+				 loggedUsers--;
+				 logConnectedUsers();
 				 serverMessage(clientName+" logged out");
 				index = clients.indexOf(clientName);
 				if (index != -1) clients.splice(index, 1);
 				else console.log('Error disconnecting '+clientName);
 			}
-		else console.log('User '+client.handshake.address+' disconnect');
+		else console.log('User disconnect');
 		});
 	}
 );
 
-
-console.log("ChattieJS running");
+httpServer.listen(port,function() {
+console.log("ChattieJS running on port "+port);
+});
