@@ -2,6 +2,8 @@ var serviceURL = document.URL;
 var socket = io.connect(serviceURL);
 var name="";
 var serverOn=false;
+
+
 function send() {
 	var input = document.getElementById("userInput").value;
 	document.getElementById("userInput").value="";
