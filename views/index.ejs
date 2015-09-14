@@ -1,12 +1,7 @@
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>ChattieJS</title>
- 	<link rel="stylesheet" type="text/css" href="client/styles.css">
-</head>
+<% include header.ejs %>
 <body>
 	<div class="center">
-    	<h1>Chattie</h1>
+    	<h1> <%= title %> </h1>
 	<p id="chat" class="chat_content">
 	</p>
 	<form action="javascript:void(0);" onsubmit="javascript:send();" id="chatform">
@@ -28,6 +23,5 @@
 
     <div id="fade" class="black_overlay"></div>
 </body>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="client/client.js"></script>
+<% include footer.html %>
 </html>

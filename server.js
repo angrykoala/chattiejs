@@ -1,53 +1,22 @@
-var http = require("http");
-var url = require("url");
-var fs = require("fs");
-var path = require("path");
-var socketio = require("socket.io");
-var mimeTypes = { "html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css", "swf": "application/x-shockwave-flash"};
+var express=require('express');
+var app = express(); //starts express framework
+var server=require('http').Server(app); //create server attached to express
+var io = require("socket.io")(server); //socket io listening to server
 
-var port=8080;
+app.engine('ejs',require('ejs').renderFile);
 
+app.use(express.static(__dirname + '/public'));
 
-var httpServer = http.createServer(
-	function(request, response) {
-		var uri = url.parse(request.url).pathname;
-		if (uri=="/") uri = "/client/index.html";
-		var pre=uri.split("/");
-		if(pre[0]!="" || (pre[1]!="client" && pre[1]!="favicon.ico")){
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write('404 Not Found\n');
-				response.end();
-		}
-		var fname = path.join(process.cwd(), uri);
-		fs.exists(fname, function(exists) {
-			if (exists) {
-				fs.readFile(fname, function(err, data){
-					if (!err) {
-						var extension = path.extname(fname).split(".")[1];
-						var mimeType = mimeTypes[extension];
-						response.writeHead(200, mimeType);
-						response.write(data);
-						response.end();
-					}
-					else {
-						response.writeHead(200, {"Content-Type": "text/plain"});
-						response.write('Error de lectura en el fichero: '+uri);
-						response.end();
-					}
-				});
-			}
-			else{
-				console.log("Invalid: "+uri);
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write('404 Not Found\n');
-				response.end();
-			}
-		});
-	}
-);
+var index_info={
+	title: "CHattieJS"
+};
 
 
-var io = socketio.listen(httpServer);
+
+app.get('/',function(req,res){
+res.render('index.ejs',index_info);
+});
+
 
 var clients=[];
 
@@ -85,9 +54,12 @@ function logConnectedUsers(){
 }
 
 
+
+
+
 io.sockets.on('connection',function(client) {
 		var clientName="";
-		console.log('user conected');
+		console.log('New user conected');
 		client.on('login',function(name){
 			if(isValid(name)){
 				clientName=name;
@@ -122,6 +94,9 @@ io.sockets.on('connection',function(client) {
 	}
 );
 
-httpServer.listen(port,function() {
-console.log("ChattieJS running on port "+port);
+server.listen(80,function(){
+console.log("ChattieJS running on port 80");
 });
+/*httpServer.listen(port,function() {
+console.log("ChattieJS running on port "+port);
+});*/
