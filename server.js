@@ -8,7 +8,7 @@ app.engine('ejs',require('ejs').renderFile);
 app.use(express.static(__dirname + '/public'));
 
 var index_info={
-	title: "CHattieJS"
+	title: "ChattieJS"
 };
 
 
@@ -94,9 +94,10 @@ io.sockets.on('connection',function(client) {
 	}
 );
 
-server.listen(80,function(){
-console.log("ChattieJS running on port 80");
+var server_port = 3000;
+var server_ip_address = '127.0.0.1';
+
+server.listen(server_port,server_ip_address,function(){
+
+console.log("ChattieJS running on port "+server_port);
 });
-/*httpServer.listen(port,function() {
-console.log("ChattieJS running on port "+port);
-});*/
